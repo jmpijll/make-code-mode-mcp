@@ -39,6 +39,16 @@ for a status overview and [`AGENTS.md`](AGENTS.md) for the architectural invaria
   sandbox traversal covering `/users/me/current-authorization`, an
   `/admin/owners` probe, `/sdk/apps`, `/audit-logs/*`, per-team
   `/scenarios`, `/connections`, `/data-stores`, and `/hooks`.
+- OpenAI Codex (CLI + desktop app) end-to-end verification —
+  `codex-cli 0.131.0-alpha.9` and the macOS Codex desktop app (same
+  build) both share `~/.codex/config.toml`, so a single
+  `codex mcp add make … -- node …/dist/index.js` registers the server
+  for both surfaces. Codex namespaces the tools as
+  `mcp__make__search` / `mcp__make__execute`, and `gpt-5.5` drove a
+  complete `search → execute → reply` round-trip against EU1 with a
+  Core-tier token in both clients. CLI transcript at
+  `out/verification/codex-cli-make-mcp.txt`; desktop app verified
+  interactively against the same registration.
 
 ### Repo / CI
 

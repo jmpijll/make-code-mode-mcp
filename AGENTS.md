@@ -190,7 +190,9 @@ Before claiming "this works with X", check the table in [`README.md` → Verific
 - 85/85 unit + integration tests (in-process MCP transport + real HTTP transport) against a mock Make.com Web API, including the `pg[limit]` bracket-notation query encoding.
 - A real read-only sweep of a **Core-tier** Make.com account: 3-call `live-test` (`/users/me` + `/organizations` + `/teams`, ~220 ms) and a 12-call `discover` sweep (adds `/users/me/current-authorization`, `/admin/owners`, `/sdk/apps`, `/audit-logs/organization/{id}`, per-team `/scenarios`, `/connections`, `/data-stores`, `/hooks`, `/audit-logs/team/{id}`). Transcripts (PII redacted) at `out/verification/make-live-smoke.txt` and `out/verification/make-discover-core.txt`.
 - The official MCP Inspector CLI end-to-end (`tools/list`, credentialled `search`, credentialled `execute` on `getUsersMe`, credentialled `/admin/owners` probe, and a credentialled `pg[limit]` bracket-encoding probe).
-- One end-to-end LLM-mediated invocation: DeepSeek v4 Flash via `opencode-go` driving `make_search` (`spec.operations.length` → `467`) and `make_execute` (`getUsersMe` → real user record).
+- Two end-to-end LLM-mediated invocations:
+  - DeepSeek v4 Flash via `opencode-go` driving `make_search` (`spec.operations.length` → `467`) and `make_execute` (`getUsersMe` → real user record).
+  - OpenAI `gpt-5.5` via Codex (CLI 0.131.0-alpha.9 and the matching macOS desktop app, both reading `~/.codex/config.toml`) driving `mcp__make__search` and `mcp__make__execute` end-to-end against EU1.
 - The Cloudflare Workers `wrangler dev` parity smoke (boot, `/health`, `/mcp` 401 no-creds, `/mcp` 502 stub-base, 404 unknown).
 
 Things we have **not** yet verified:
@@ -199,7 +201,7 @@ Things we have **not** yet verified:
 - Audit logs (`/audit-logs/*`) — the scope is granted on the Core token, but the endpoint returns `402 Payment Required` (needs Teams / Enterprise plan).
 - Admin endpoints from a VPN-allowlisted environment — `/admin/owners` returns `403 VPN access only [IM121]` from outside Make's office network even with `admin:read`.
 - Other zones beyond `eu1.make.com`.
-- Other agent / IDE clients (Cursor, Claude Desktop, Claude Code, Continue, Cline, Aider, Zed, MCP Inspector UI).
+- Other agent / IDE clients beyond opencode and Codex (Cursor, Claude Desktop, Claude Code, Continue, Cline, Aider, Zed, MCP Inspector UI).
 - Long-running soak / stability under sustained load.
 - A hosted multi-tenant deployment behind a reverse proxy.
 - The Cloudflare Workers transport adapter (501 scaffold; routing, auth-header validation, spec loader, 404/401/502 paths *are* verified).

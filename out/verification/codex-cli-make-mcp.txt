@@ -1,0 +1,54 @@
+# Codex CLI — make MCP server end-to-end
+#
+# Setup:
+#   ln -sf /Applications/Codex.app/Contents/Resources/codex /opt/homebrew/bin/codex
+#   codex mcp add make \
+#     --env "MAKE_API_KEY=$(op read 'op://AI Agents/Make.com API Key Full Access/password')" \
+#     --env "MAKE_BASE_URL=https://eu1.make.com/api/v2" \
+#     -- node /home/user/make-mcp/dist/index.js
+#
+# Verification command:
+#   codex exec \
+#     --skip-git-repo-check \
+#     --dangerously-bypass-approvals-and-sandbox \
+#     --color never --json \
+#     "<prompt below>" < /dev/null
+#
+# Codex version: codex-cli 0.131.0-alpha.9 (bundled with Codex.app on macOS)
+# Model: gpt-5.5
+# Date: 2026-05-15
+#
+# `--dangerously-bypass-approvals-and-sandbox` is required for non-interactive
+# `codex exec` runs. Interactive `codex` (no `exec`) will prompt the user to
+# approve each MCP tool call instead.
+#
+# The same registration also drives the Codex macOS desktop app — both
+# surfaces share `~/.codex/config.toml` and expose tools as
+# `mcp__make__search` / `mcp__make__execute`. Desktop-app verification was
+# performed interactively against the same build (gpt-5.5, same prompt);
+# only the CLI run is reproduced below in --json form.
+
+=== mcp servers (codex mcp list) ===
+Name  Command  Args                                            Env                                      Cwd  Status   Auth
+make  node     /home/user/make-mcp/dist/index.js               MAKE_API_KEY=*****, MAKE_BASE_URL=*****  -    enabled  Unsupported
+
+=== prompt ===
+Use the make MCP server. Call mcp__make__search with code
+'spec.operations.length' and remember the number. Then call
+mcp__make__execute with this exact code:
+  (async () => {
+    const r = await make.callOperation('getUsersMe', {});
+    return { id: r.authUser.id, email: r.authUser.email };
+  })()
+Reply with EXACTLY one line: opCount=<num> userId=<id>
+
+=== JSON-event tail (Codex `--json` stream, mcp_tool_call + agent_message only) ===
+
+{"type":"item.started","item":{"id":"item_0","type":"mcp_tool_call","server":"make","tool":"search","arguments":{"code":"spec.operations.length"},"status":"in_progress"}}
+{"type":"item.completed","item":{"id":"item_0","type":"mcp_tool_call","server":"make","tool":"search","arguments":{"code":"spec.operations.length"},"result":{"content":[{"type":"text","text":"467"},{"type":"text","text":"--- Executed in 36ms ---"}],"structured_content":null},"status":"completed"}}
+{"type":"item.started","item":{"id":"item_1","type":"mcp_tool_call","server":"make","tool":"execute","arguments":{"code":"(async () => {\n  const r = await make.callOperation('getUsersMe', {});\n  return { id: r.authUser.id, email: r.authUser.email };\n})()"},"status":"in_progress"}}
+{"type":"item.completed","item":{"id":"item_1","type":"mcp_tool_call","server":"make","tool":"execute","arguments":{"code":"(async () => {\n  const r = await make.callOperation('getUsersMe', {});\n  return { id: r.authUser.id, email: r.authUser.email };\n})()"},"result":{"content":[{"type":"text","text":"{\n  \"id\": 9999999,\n  \"email\": \"user@example.com\"\n}"},{"type":"text","text":"--- Executed in 201ms · 1 API calls ---"}],"status":"completed"}}
+{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"opCount=467 userId=9999999"}}
+
+=== final agent reply ===
+opCount=467 userId=9999999

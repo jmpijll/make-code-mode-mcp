@@ -79,11 +79,11 @@ function pairs(): RedactionPair[] {
     });
   }
 
-  // Rewrite any caller-supplied paths first (so /Users/<name>/proj → /home/user/proj).
   for (const path of splitCsv(process.env['REDACT_PATHS'])) {
+    const normalised = path.endsWith('/') ? path : `${path}/`;
     out.push({
-      pattern: new RegExp(escapeRegex(path), 'g'),
-      replacement: '/home/user',
+      pattern: new RegExp(escapeRegex(normalised), 'g'),
+      replacement: '/home/user/',
     });
   }
 

@@ -134,9 +134,34 @@ VS Code 1.89+ with Copilot Chat reads `.vscode/mcp.json`:
 
 Untested.
 
-## Codex CLI — **NOT-VERIFIED**
+## Codex CLI & Codex desktop app — **VERIFIED**
 
-In `~/.codex/config.toml`:
+Verified end-to-end against **both** OpenAI Codex surfaces:
+
+- `codex-cli 0.131.0-alpha.9` — driven via `codex exec --json` (transcript at [`out/verification/codex-cli-make-mcp.txt`](../../out/verification/codex-cli-make-mcp.txt)).
+- **Codex desktop app** (macOS `Codex.app`, same 0.131.0-alpha.9 build) — driven interactively, same prompt, same `gpt-5.5` model.
+
+Both surfaces share the same `~/.codex/config.toml`, so you only register the MCP server once and it's available to both. On macOS the CLI binary lives inside the app bundle; expose it on `PATH`:
+
+```bash
+ln -sf /Applications/Codex.app/Contents/Resources/codex /opt/homebrew/bin/codex
+codex --version
+```
+
+Register the MCP server (writes the entry to `~/.codex/config.toml`, which both the CLI and the desktop app read):
+
+```bash
+codex mcp add make \
+  --env "MAKE_API_KEY=<token>" \
+  --env "MAKE_BASE_URL=https://eu1.make.com/api/v2" \
+  -- node /abs/path/to/make-code-mode-mcp/dist/index.js
+codex mcp list      # should show `make … enabled`
+codex mcp get make  # full config dump
+```
+
+If the Codex desktop app is already running, restart it after the `mcp add` so it picks up the new server.
+
+…or write the entry directly:
 
 ```toml
 [mcp_servers.make]
@@ -145,9 +170,33 @@ args = ["/abs/path/to/make-code-mode-mcp/dist/index.js"]
 
 [mcp_servers.make.env]
 MAKE_API_KEY = "<token>"
+MAKE_BASE_URL = "https://eu1.make.com/api/v2"
 ```
 
-Untested.
+Codex namespaces tools as `mcp__<server>__<tool>`, so this server exposes `mcp__make__search` and `mcp__make__execute`.
+
+### Interactive use (CLI or desktop app)
+
+Run `codex` from any directory, or open the Codex desktop app and start a chat. On the first MCP tool call you'll be prompted to approve the `make` server; pick **Always allow for this server** and it will auto-approve subsequent calls in that session. The desktop app surface uses the same `mcp__make__search` / `mcp__make__execute` tool names as the CLI.
+
+### Non-interactive (`codex exec`)
+
+`codex exec` auto-cancels MCP tool calls under any approval policy unless sandbox/approvals are bypassed (intentional Codex safety default). Drive the server like this:
+
+```bash
+codex exec \
+  --skip-git-repo-check \
+  --dangerously-bypass-approvals-and-sandbox \
+  "Use the make MCP server. First call mcp__make__search with code 'spec.operations.length',
+then call mcp__make__execute with code:
+(async () => {
+  const r = await make.callOperation('getUsersMe', {});
+  return { id: r.authUser.id, email: r.authUser.email };
+})()
+Reply with one line: opCount=<num> userId=<id>" < /dev/null
+```
+
+Verified on EU1 with a Make.com Core-tier token: `mcp__make__search` returned `467` operations and `mcp__make__execute` returned the live `/users/me` payload via QuickJS. Redacted transcript: [`out/verification/codex-cli-make-mcp.txt`](../../out/verification/codex-cli-make-mcp.txt).
 
 ## Continue — **NOT-VERIFIED**
 
