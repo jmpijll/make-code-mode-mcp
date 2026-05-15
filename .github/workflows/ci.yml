@@ -41,8 +41,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build
-      # Confirm wrangler can parse the worker config; we don't deploy.
-      # `worker_loaders` requires wrangler@4 — wrangler@3 prints a warning
-      # but still succeeds at `deploy --dry-run`, which is what we want.
+      # Confirm wrangler can parse the worker config (incl. `worker_loaders`
+      # binding); we don't deploy. Requires wrangler@4 — pinned in package.json.
       - run: npx wrangler --version
       - run: npx wrangler deploy --dry-run --outdir=.wrangler-out --config cf-worker/wrangler.toml

@@ -141,7 +141,7 @@ What is **not yet verified** (testers welcome):
 - Other agent / IDE clients beyond MCP Inspector CLI and opencode (Cursor, Claude Desktop, Claude Code, Continue, Cline, Codeium, Aider, Zed, …) and the MCP Inspector UI / HTTP / SSE transports.
 - Hosted/multi-tenant deployment behind a reverse proxy.
 - Long-running soak / stability under sustained load.
-- The Cloudflare Workers transport adapter — the routing, auth-header validation, spec loader, and 404/401/502 paths all work; the 501 transport-adapter scaffold and `worker_loaders` `LOADER` binding (requires `wrangler@4`) remain unimplemented.
+- The Cloudflare Workers transport adapter — the routing, auth-header validation, spec loader, and 404/401/502 paths all work; the `worker_loaders` `LOADER` binding is wired in (wrangler@4 ships in `devDependencies` and recognises the binding on `deploy --dry-run`), but the 501 transport-adapter scaffold bridging the MCP SDK's `node:http` transport to the Workers Fetch API is still TODO.
 
 ## Plan tiers & scopes
 

@@ -48,9 +48,17 @@ npm run cf:dev      # local wrangler dev
 npm run cf:deploy   # deploy to Cloudflare
 ```
 
+## Requirements
+
+- **Wrangler ≥ 4.0.0** — the `worker_loaders = [{ binding = "LOADER" }]`
+  binding in `wrangler.toml` is supported on `wrangler@4+`. The repo's
+  `devDependencies` already pin this; `npm run cf:dev` / `npm run cf:deploy`
+  pick it up.
+
 ## Limitations
 
 - No persistent on-disk spec cache; specs are cached in module memory per
   Worker instance.
-- The free Make.com plan only has "Limited" API access — paid plans unlock
-  full /api/v2. This is independent of where the MCP server runs.
+- Make.com plan-tier gates apply identically whether the MCP server runs in
+  Node or in a Worker — they're upstream-API restrictions, not transport
+  restrictions. See [`../README.md` → Plan tiers & scopes](../README.md#plan-tiers--scopes).

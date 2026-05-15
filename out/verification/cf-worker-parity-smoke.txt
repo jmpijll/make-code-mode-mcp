@@ -1,39 +1,46 @@
+# cf-worker parity smoke ? wrangler@4.92.0
+#
+# Boots the Cloudflare Worker scaffold under `wrangler dev --local`
+# (Miniflare) and probes the four documented HTTP shapes. Verifies:
+#   - boot succeeds with the `worker_loaders = [{ binding = "LOADER" }]`
+#     binding registered (no "Unexpected fields" warning)
+#   - GET  /health        ? 200 {"status":"ok"}
+#   - POST /mcp           ? 401 with documented missing-header message (no creds)
+#   - POST /mcp           ? 502 spec-load failure for an unreachable base URL (with creds)
+#   - GET  /unknown       ? 404 plain-text
 
- ⛅️ wrangler 3.114.17 (update available 4.92.0)
------------------------------------------------
+=== boot log ===
 
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mThe version of Wrangler you are using is now out-of-date.[0m
+ ?? wrangler 4.92.0
+???????????????????
+Your Worker has access to the following bindings:
+Binding            Resource           Mode
+env.LOADER         Worker Loader      local
 
-  Please update to the latest version to prevent critical errors.
-  Run `npm install --save-dev wrangler@4` to update to the latest version.
-  After installation, run Wrangler with `npx wrangler`.
+? Starting local server...
+[wrangler:info] Ready on http://localhost:8788
 
+=== /health ===
+HTTP/1.1 200 OK
+Content-Length: 15
+Content-Type: application/json
 
-[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProcessing cf-worker/wrangler.toml configuration:[0m
+{"status":"ok"}
 
-    - Unexpected fields found in top-level field: "worker_loaders"
-
-
-No bindings found.
-⎔ Starting local server...
-[wrangler-UserWorker:wrn] The latest compatibility date supported by the installed Cloudflare Workers Runtime is "2025-07-18",
-but you've requested "2026-01-01". Falling back to "2025-07-18"...
-Features enabled by your requested compatibility date may not be available.
-Upgrade to `wrangler@4.92.0` to remove this warning.
-[wrangler:inf] Ready on http://localhost:8788
-[wrangler:inf] GET /health 200 OK (4ms)
-[wrangler:inf] POST /mcp 401 Unauthorized (2ms)
-[wrangler:inf] POST /mcp 502 Bad Gateway (18ms)
-[wrangler:inf] GET /whatever 404 Not Found (1ms)
-: application/json
+=== /mcp no creds ===
+HTTP/1.1 401 Unauthorized
+Content-Length: 153
+Content-Type: application/json
 
 {"error":"Missing X-Make-Api-Key header (or DEFAULT_MAKE_API_KEY env). Base URL defaults to https://eu1.make.com/api/v2; override with X-Make-Base-Url."}
+
 === /mcp with creds + stub base ===
 HTTP/1.1 502 Bad Gateway
 Content-Length: 85
 Content-Type: application/json
 
-{"error":"Failed to load spec: internal error; reference = 5rnutc971d3ijj1s116mbjih"}
+{"error":"Failed to load spec: internal error; reference = <redacted-cf-trace-id>"}
+
 === /unknown ===
 HTTP/1.1 404 Not Found
 Content-Length: 9

@@ -221,7 +221,7 @@ If you add new client coverage, update the table in the README in the same PR. D
 - **Mutation verification.** A self-reverting `PATCH` (or `POST`/`DELETE` round-trip) against a non-production scenario or data-store entry.
 - **Multi-zone verification.** Currently only EU1 is driven; the other five zones in `KNOWN_MAKE_ZONES` should be smoke-tested.
 - **Broader client validation.** Confirmed working configs for Cursor, Claude Desktop, Continue, Cline, Aider, Zed, the MCP Inspector UI, and HTTP/SSE transports.
-- **Cloudflare Workers full transport.** `wrangler dev` parity smoke verified routing, auth-header validation, spec-loader, and 404/401/502 paths all work; the 501 transport-adapter scaffold and the `worker_loaders` `LOADER` binding (requires `wrangler@4`) remain unimplemented and unreached. See `cf-worker/README.md` for the open work.
+- **Cloudflare Workers full transport.** `wrangler dev` parity smoke verified routing, auth-header validation, spec-loader, and 404/401/502 paths all work. The `worker_loaders` `LOADER` binding is now wired in (`wrangler@4` ships in `devDependencies`, `worker_loaders = [{ binding = "LOADER" }]` parses cleanly), but the 501 transport-adapter scaffold that bridges the SDK's node:http transport to Workers' Web Fetch API still needs to be written. See `cf-worker/README.md` for the open work.
 - **Per-tenant rate limiting** keyed on hashed credentials (today the limiter is per-IP).
 - **NPM publish** — reserved for `1.0.0`. The package is `"private": true` until then.
 
