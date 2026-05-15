@@ -11,9 +11,10 @@
 > One sandbox surface (`make.*`) covers the entire Make.com Web API v2
 > (~467 operations on the EU1 zone). 85/85 unit + integration tests
 > green, end-to-end LLM-mediated invocation verified through MCP
-> Inspector CLI and opencode (DeepSeek v4 Flash) against a real Make.com
-> Core-tier account (all-scope token, 12 sandbox host calls per
-> discovery sweep). Read-only sweeps of `/users/me`,
+> Inspector CLI, opencode (DeepSeek v4 Flash), and OpenAI Codex (CLI
+> 0.131.0-alpha.9 + Codex desktop app, both driving `gpt-5.5`) against a
+> real Make.com Core-tier account (all-scope token, 12 sandbox host calls
+> per discovery sweep). Read-only sweeps of `/users/me`,
 > `/users/me/current-authorization`, `/organizations`, `/teams`,
 > `/scenarios`, `/connections`, `/data-stores`, `/hooks`, and `/sdk/apps`
 > are live-verified. Mutations are wired but **not** verified by us
@@ -130,6 +131,7 @@ What we have **directly verified** so far:
 | **Broad read-only discovery sweep** | `npm run discover` — 12-call sandbox traversal through `/users/me`, `/users/me/current-authorization`, `/admin/owners`, `/sdk/apps`, `/organizations`, `/teams`, `/audit-logs/organization/{id}`, plus per-team `/scenarios`, `/connections`, `/data-stores`, `/hooks`, `/audit-logs/team/{id}` — uses Make.com's bracketed `pg[limit]=…` pagination syntax end-to-end | ✅ 12 calls; sdk/apps + connections + scenarios + data-stores + hooks succeed; audit-logs return `402 Payment Required` (need Teams/Enterprise plan); `/admin/owners` returns `403 VPN access only [IM121]` (IP-gated, not scope-gated); transcript at `out/verification/make-discover-core.txt` |
 | **MCP Inspector (CLI mode)** | `@modelcontextprotocol/inspector@0.20.0 --cli --transport stdio` against the live API; `tools/list`, credentialled `search` (`findOperationsByPath`), credentialled `execute` (`getUsersMe`), a credentialled 403 probe (`/admin/owners`), and a credentialled `pg[limit]` bracket-encoding probe | ✅ all five phases pass; transcripts in `out/verification/mcp-inspector-*.txt` |
 | **End-to-end LLM-mediated invocation via opencode** | DeepSeek v4 Flash via `opencode-go` provider, project-scoped `opencode.json`, opencode v1.14.30 — model called `make_search` with `spec.operations.length` then `make_execute` with the async-IIFE `getUsersMe` recipe | ✅ Model received MCP tools as `make_search` / `make_execute`, called them with the right code, server returned `467` (operation count) and the real user `{name, email}`; transcripts at `out/verification/opencode-make-mcp-*.txt` |
+| **End-to-end LLM-mediated invocation via OpenAI Codex (CLI + desktop app)** | `codex-cli 0.131.0-alpha.9` (bundled with `Codex.app`), `gpt-5.5`. Server registered once via `codex mcp add make -- node …/dist/index.js`; entry lives in `~/.codex/config.toml` and is shared by both the CLI and the Codex macOS desktop app. CLI ran the two-step `mcp__make__search` / `mcp__make__execute` recipe via `codex exec --json`; the Codex desktop app drove the same recipe interactively after approving the `make` server. | ✅ Tools surface as `mcp__make__search` / `mcp__make__execute` in both clients; CLI returned `opCount=467 userId=<id>` from a single `search → execute → reply` round-trip; desktop app produced the same result interactively. CLI transcript at `out/verification/codex-cli-make-mcp.txt`. |
 | **Cloudflare Workers — `wrangler dev` parity smoke** | `npm run cf:dev` (Miniflare) + curl probes against `/health`, `/mcp`, unknown paths | ✅ Worker boots; `/health` → `{"status":"ok"}`; `/mcp` without creds → 401 with documented missing-header message; `/mcp` with creds → 502 (spec-load failure for stub baseUrl, as expected); unknown path → 404. The 501 transport-adapter scaffold is documented and unreachable without real creds + a publicly-trusted controller. Transcript at `out/verification/cf-worker-parity-smoke.txt` |
 
 What is **not yet verified** (testers welcome):
@@ -138,7 +140,7 @@ What is **not yet verified** (testers welcome):
 - Admin/internal endpoints (`/admin/*`, `/hq/*`, `/debug/*`, `/mailhub/*`) — the token has `admin:read`/`admin:write` scopes, but `/admin/owners` cleanly returns `403 VPN access only [IM121]` from outside Make's office network. Behaviour from a VPN-allowlisted environment is unverified.
 - Audit logs (`/audit-logs/*`) — the token has the scope, but the endpoint requires Make's **Teams / Enterprise** tier and returns `402 Payment Required` on a Core plan.
 - Other regional zones (`eu2`, `us1`, `us2`, Celonis variants) — the loader trusts whatever `MAKE_BASE_URL` resolves to; only EU1 has been driven end-to-end.
-- Other agent / IDE clients beyond MCP Inspector CLI and opencode (Cursor, Claude Desktop, Claude Code, Continue, Cline, Codeium, Aider, Zed, …) and the MCP Inspector UI / HTTP / SSE transports.
+- Other agent / IDE clients beyond MCP Inspector CLI, opencode, Codex CLI, and the Codex desktop app (Cursor, Claude Desktop, Claude Code, Continue, Cline, Codeium, Aider, Zed, …) and the MCP Inspector UI / HTTP / SSE transports.
 - Hosted/multi-tenant deployment behind a reverse proxy.
 - Long-running soak / stability under sustained load.
 - The Cloudflare Workers transport adapter — the routing, auth-header validation, spec loader, and 404/401/502 paths all work; the `worker_loaders` `LOADER` binding is wired in (wrangler@4 ships in `devDependencies` and recognises the binding on `deploy --dry-run`), but the 501 transport-adapter scaffold bridging the MCP SDK's `node:http` transport to the Workers Fetch API is still TODO.
