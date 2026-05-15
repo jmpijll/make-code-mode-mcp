@@ -1,0 +1,17 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "make": {
+      "type": "local",
+      "command": ["node", "dist/index.js"],
+      "enabled": true,
+      "environment": {
+        "MAKE_API_KEY": "{env:MAKE_API_KEY}",
+        "MAKE_BASE_URL": "{env:MAKE_BASE_URL}"
+      }
+    }
+  },
+  "permission": {
+    "make_*": "allow"
+  }
+}

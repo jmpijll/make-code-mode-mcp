@@ -1,0 +1,42 @@
+
+ ⛅️ wrangler 3.114.17 (update available 4.92.0)
+-----------------------------------------------
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mThe version of Wrangler you are using is now out-of-date.[0m
+
+  Please update to the latest version to prevent critical errors.
+  Run `npm install --save-dev wrangler@4` to update to the latest version.
+  After installation, run Wrangler with `npx wrangler`.
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProcessing cf-worker/wrangler.toml configuration:[0m
+
+    - Unexpected fields found in top-level field: "worker_loaders"
+
+
+No bindings found.
+⎔ Starting local server...
+[wrangler-UserWorker:wrn] The latest compatibility date supported by the installed Cloudflare Workers Runtime is "2025-07-18",
+but you've requested "2026-01-01". Falling back to "2025-07-18"...
+Features enabled by your requested compatibility date may not be available.
+Upgrade to `wrangler@4.92.0` to remove this warning.
+[wrangler:inf] Ready on http://localhost:8788
+[wrangler:inf] GET /health 200 OK (4ms)
+[wrangler:inf] POST /mcp 401 Unauthorized (2ms)
+[wrangler:inf] POST /mcp 502 Bad Gateway (18ms)
+[wrangler:inf] GET /whatever 404 Not Found (1ms)
+: application/json
+
+{"error":"Missing X-Make-Api-Key header (or DEFAULT_MAKE_API_KEY env). Base URL defaults to https://eu1.make.com/api/v2; override with X-Make-Base-Url."}
+=== /mcp with creds + stub base ===
+HTTP/1.1 502 Bad Gateway
+Content-Length: 85
+Content-Type: application/json
+
+{"error":"Failed to load spec: internal error; reference = 5rnutc971d3ijj1s116mbjih"}
+=== /unknown ===
+HTTP/1.1 404 Not Found
+Content-Length: 9
+Content-Type: text/plain;charset=UTF-8
+
+Not found

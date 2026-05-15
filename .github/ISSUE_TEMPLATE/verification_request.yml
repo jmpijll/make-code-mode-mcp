@@ -1,0 +1,56 @@
+name: Verification request
+description: Drove the server against a client / tier / zone we haven't verified — share what you found.
+title: '[verify] '
+labels: ['verification']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        See the verification matrix in [`README.md` → Verification status](../../blob/main/README.md#verification-status).
+        We track what's been proven by us vs. what's testers-welcome. Help us widen the proven set.
+  - type: input
+    id: client
+    attributes:
+      label: MCP client / agent
+      placeholder: Cursor IDE / Claude Desktop / Continue / Cline / opencode / Aider / Zed / …
+    validations:
+      required: true
+  - type: input
+    id: client-version
+    attributes:
+      label: Client version
+    validations:
+      required: true
+  - type: dropdown
+    id: make-tier
+    attributes:
+      label: Make.com plan tier
+      options:
+        - Free
+        - Core
+        - Pro
+        - Teams
+        - Enterprise
+        - White-label / OEM (Celonis)
+        - Unknown
+  - type: input
+    id: zone
+    attributes:
+      label: Make.com zone
+      placeholder: eu1 / eu2 / us1 / us2 / Celonis variant
+  - type: textarea
+    id: what-worked
+    attributes:
+      label: What worked
+      description: Which operations did you call successfully? Read-only? Mutations? Paste a sandbox snippet.
+    validations:
+      required: true
+  - type: textarea
+    id: what-didnt
+    attributes:
+      label: What didn't work (and the exact upstream error)
+      description: Include `[make.http] HTTP <code>` and Make.com's error code (`[IM121]`, `[SC400]`, etc.).
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes / surprises / suggested fixes

@@ -1,0 +1,10 @@
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mmake_execute {"code":"(async()=>{const r=await make.callOperation('getUsersMe',{});return {name:r.authUser.name,email:r.authUser.email};})()"}
+```json
+{
+  "name": "Example User",
+  "email": "user@example.com"
+}
+```

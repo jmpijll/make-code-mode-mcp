@@ -1,0 +1,80 @@
+
+> make-code-mode-mcp@0.1.0-beta.1 live-test
+> tsx scripts/live-test.ts
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[live] target=https://eu1.make.com/api/v2
+[live] spec=Web API v2 - Public v1.0.0 (467 ops)
+[live] running sandbox sweep…
+[live] sandbox done in 221ms — ok=true calls=3
+[live] result:
+{
+  "ok": true,
+  "data": {
+    "generatedAt": "2026-05-15T19:46:20.828Z",
+    "user": {
+      "authUser": {
+        "id": 9999999,
+        "name": "Example User",
+        "email": "user@example.com",
+        "language": "en",
+        "timezoneId": 222,
+        "localeId": 83,
+        "countryId": 164,
+        "features": {},
+        "avatar": "https://secure.gravatar.com/avatar/<redacted-gravatar-hash>.jpg?d=mm",
+        "lastLogin": "2026-05-15T16:26:02.266Z",
+        "tfaStatus": 2,
+        "timezone": "Europe/Amsterdam",
+        "locale": "nl",
+        "slug": null,
+        "hasAddedApp": false,
+        "uiSettings": {},
+        "overriddenFeatureFlags": []
+      }
+    },
+    "organizations": {
+      "organizations": [
+        {
+          "id": 9999000,
+          "name": "example-org-1",
+          "timezoneId": 222,
+          "zone": "eu1.make.com"
+        }
+      ],
+      "pg": {
+        "sortBy": "name",
+        "limit": 10000,
+        "sortDir": "asc",
+        "offset": 0,
+        "returnTotalCount": false
+      }
+    },
+    "teamsByOrg": [
+      {
+        "organizationId": 9999000,
+        "teams": {
+          "teams": [
+            {
+              "id": 8888000,
+              "name": "My Team",
+              "organizationId": 9999000,
+              "globalAgentsEnabled": false
+            }
+          ],
+          "pg": {
+            "sortBy": "name",
+            "limit": 10000,
+            "sortDir": "asc",
+            "offset": 0,
+            "returnTotalCount": false
+          }
+        }
+      }
+    ]
+  },
+  "logs": [],
+  "warnings": [],
+  "callsMade": 3,
+  "durationMs": 220
+}

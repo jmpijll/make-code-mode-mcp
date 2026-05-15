@@ -1,0 +1,82 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Mock Make.com API",
+    "version": "1.0.0-test"
+  },
+  "servers": [
+    { "url": "https://eu1.make.com/api/v2" }
+  ],
+  "security": [{ "token": [] }],
+  "paths": {
+    "/users/me": {
+      "get": {
+        "operationId": "getUser",
+        "tags": ["Users"],
+        "summary": "Current user info",
+        "security": [{ "token": ["user:read"] }]
+      }
+    },
+    "/organizations": {
+      "get": {
+        "operationId": "getOrganizations",
+        "tags": ["Organizations"],
+        "summary": "List organizations the token can see",
+        "security": [{ "token": ["organizations:read"] }]
+      }
+    },
+    "/organizations/{organizationId}/teams": {
+      "get": {
+        "operationId": "getTeams",
+        "tags": ["Teams"],
+        "summary": "List teams in an organization",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "security": [{ "token": ["teams:read"] }]
+      }
+    },
+    "/scenarios": {
+      "get": {
+        "operationId": "listScenarios",
+        "tags": ["Scenarios"],
+        "summary": "List scenarios in a team",
+        "parameters": [
+          { "name": "teamId", "in": "query", "required": true, "schema": { "type": "integer" } }
+        ],
+        "security": [{ "token": ["scenarios:read"] }]
+      },
+      "post": {
+        "operationId": "createScenario",
+        "tags": ["Scenarios"],
+        "summary": "Create a scenario",
+        "requestBody": { "required": true, "content": { "application/json": {} } },
+        "security": [{ "token": ["scenarios:write"] }]
+      }
+    },
+    "/scenarios/{scenarioId}": {
+      "get": {
+        "operationId": "getScenario",
+        "tags": ["Scenarios"],
+        "summary": "Get one scenario",
+        "parameters": [
+          { "name": "scenarioId", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "security": [{ "token": ["scenarios:read"] }]
+      }
+    },
+    "/admin/owners": {
+      "get": {
+        "operationId": "listOwners",
+        "tags": ["Admin"],
+        "summary": "Admin-only endpoint",
+        "security": [{ "token": ["admin:read"] }]
+      }
+    }
+  }
+}

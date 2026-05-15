@@ -1,0 +1,7 @@
+dist/
+node_modules/
+coverage/
+.cache/
+*.md
+package-lock.json
+src/spec/make-fallback.json

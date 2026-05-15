@@ -1,0 +1,17 @@
+
+> make-code-mode-mcp@0.1.0-beta.1 discover
+> tsx scripts/discover.ts
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[discover] target=https://eu1.make.com/api/v2
+[discover] spec=Web API v2 - Public v1.0.0 (467 ops)
+[discover] running sandbox traversal…
+[discover] sandbox done in 1601ms — ok=true calls=12
+[discover] wrote /home/user/make-mcp/out/make-discovery-2026-05-15T19-45-38-654Z.json
+[discover] user=user@example.com
+[discover] token scopes=67
+[discover] adminOwnersProbe fail "[make.http] HTTP 403 on /admin/owners: VPN access only [IM121]"
+[discover] sdkApps ok keys=[apps]
+[discover]   org="example-org-1" teams=1 scenarios=0 connections=0 dataStores=0 hooks=0
+[discover]     org auditLogs fail "[make.http] HTTP 402 on /audit-logs/organization/9999000: There was an error whi"
+[discover]     team "My Team" auditLogs fail "[make.http] HTTP 402 on /audit-logs/team/8888000: There was an error while gener"

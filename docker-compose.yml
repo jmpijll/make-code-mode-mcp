@@ -1,0 +1,21 @@
+services:
+  make-mcp:
+    build: .
+    image: make-code-mode-mcp:latest
+    container_name: make-code-mode-mcp
+    restart: unless-stopped
+    ports:
+      - '8000:8000'
+    environment:
+      MCP_TRANSPORT: http
+      MCP_HTTP_PORT: '8000'
+      # In multi-tenant deployments, leave the credential vars unset and let
+      # the MCP client send them as X-Make-* headers per request.
+      MAKE_BASE_URL: ${MAKE_BASE_URL:-https://eu1.make.com/api/v2}
+      MAKE_API_KEY: ${MAKE_API_KEY:-}
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:8000/health']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

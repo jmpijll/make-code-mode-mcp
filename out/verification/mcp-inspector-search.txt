@@ -1,0 +1,13 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "[\n  {\n    \"operationId\": \"getUsersMeApiTokens\",\n    \"method\": \"GET\",\n    \"path\": \"/users/me/api-tokens\",\n    \"tag\": \"usersApiTokens\",\n    \"summary\": \"List users API tokens\",\n    \"parameters\": [],\n    \"requiredScopes\": [\n      [\n        \"user:read\"\n      ]\n    ]\n  },\n  {\n    \"operationId\": \"createUsersMeApiTokens\",\n    \"method\": \"POST\",\n    \"path\": \"/users/me/api-tokens\",\n    \"tag\": \"usersApiTokens\",\n    \"summary\": \"Create new API token\",\n    \"parameters\": [],\n    \"hasRequestBody\": true,\n    \"requiredScopes\": [\n      [\n        \"user:write\"\n      ]\n    ]\n  },\n  {\n    \"operationId\": \"deleteUsersMeApiToken\",\n    \"method\": \"DELETE\",\n    \"path\": \"/users/me/api-tokens/{timestamp}\",\n    \"tag\": \"usersApiTokens\",\n    \"summary\": \"Delete API token\",\n    \"parameters\": [\n      {\n        \"name\": \"timestamp\",\n        \"in\": \"path\",\n        \"required\": true,\n        \"type\": \"string\"\n      }\n    ],\n    \"requiredScopes\": [\n      [\n        \"user:write\"\n      ]\n    ]\n  },\n  {\n    \"operationId\": \"getUsersMe\",\n    \"method\": \"GET\",\n    \"path\": \"/users/me\",\n    \"tag\": \"usersMe\",\n    \"summary\": \"Current user data\",\n    \"parameters\": [\n      {\n        \"name\": \"includeInvitedOrg\",\n        \"in\": \"query\",\n        \"required\": false,\n        \"type\": \"boolean\"\n      },\n      {\n        \"name\": \"cols\",\n        \"in\": \"query\",\n        \"required\": false,\n        \"type\": \"array\"\n      }\n    ],\n    \"requiredScopes\": [\n      [\n        \"organization:read\"\n      ]\n    ]\n  },\n  {\n    \"operationId\": \"getUsersMeCurrentAuthorization\",\n    \"method\": \"GET\",\n    \"path\": \"/users/me/current-authorization\",\n    \"tag\": \"usersMe\",\n    \"summary\": \"Current user authorization\",\n    \"parameters\": [],\n    \"requiredScopes\": [\n      [\n        \"organization:read\"\n      ]\n    ]\n  }\n]"
+    },
+    {
+      "type": "text",
+      "text": "--- Executed in 60ms ---"
+    }
+  ],
+  "isError": false
+}

@@ -1,0 +1,48 @@
+{
+  "tools": [
+    {
+      "name": "search",
+      "title": "Search Make.com API spec",
+      "description": "Search the Make.com Web API v2 OpenAPI spec by writing JavaScript.\n\nThe sandbox is read-only — no network. Use this tool to **discover** what to call before invoking `execute`.\n\n## Globals\n\n- `spec` — `{ title, version, sourceUrl, serverPrefix, operations[] }`\n  Operations are compact: `{ operationId, method, path, tag, summary, parameters, hasRequestBody, deprecated, requiredScopes? }`.\n  `spec` may be `null` if no spec is loaded.\n- `searchOperations(query, limit?)` — text-ranked search.\n- `getOperation(operationId)` — full operation including spec parameter detail. Pass either an `operationId` or `\"METHOD /path\"`.\n- `findOperationsByPath(substring)` — list operations whose path contains the substring (case-insensitive).\n- `console.log()` — captured into the tool output.\n\n## Examples\n\n```javascript\n// All operations tagged \"scenarios\"\nspec.operations.filter(function (op) { return op.tag === 'scenarios'; });\n```\n\n```javascript\n// Top 10 hits for \"data store\"\nsearchOperations('data store', 10);\n```\n\n```javascript\n// Full detail on listScenarios\ngetOperation('listScenarios');\n```\n",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "JavaScript code to execute against the OpenAPI spec. The final expression is returned."
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "execute",
+      "title": "Execute Make.com API calls",
+      "description": "Run Make.com API calls by writing JavaScript that uses the `make` namespace.\n\nSurface:\n\n- `make.<tag>.<operationId>(args)` — typed operation call, e.g. `make.scenarios.listScenarios({ teamId: 1, pg: { limit: 50 } })`. Args are auto-routed: keys matching path or query params from the spec are placed correctly; remaining keys form the JSON body if the operation accepts one. To override, pass `{ pathParams: {...}, query: {...}, body: {...}, headers: {...} }`.\n- `make.callOperation(operationId, args)` — flat lookup by id.\n- `make.request({ method, path, pathParams?, query?, body?, headers? })` — raw HTTP escape hatch.\n- `make.spec` — `{ title, version, sourceUrl, operationCount }` for diagnostics.\n\nOperations are async — use `await`. The final expression is the tool result.\n\n## Examples\n\n```javascript\nconst me = await make.callOperation('getUser', {});\nreturn me.data;\n```\n\n```javascript\nconst orgs = await make.callOperation('getOrganizations', {});\nreturn orgs.organizations.map(function (o) { return { id: o.id, name: o.name }; });\n```\n\n```javascript\n// Raw escape hatch — call an endpoint not present in the spec\nconst r = await make.request({ method: 'GET', path: '/users/me' });\nreturn r;\n```\n\n## Errors\n\nErrors are prefixed with a structured tag:\n\n- `[make.http] HTTP 403 on /scenarios: ... (operation requires scope \\`scenarios:read\\` — check your Make.com API token has it)`\n- `[make.missing-credentials] ...` when no API key is configured\n- `[make.unknown-operation] ...` when the operationId doesn't exist in the spec\n- `[make.error] ...` for everything else\n\n## Limits\n\n- Hard ceiling on API calls per execute; exceeded → error.\n- Sandbox memory + time bounded.\n- Credentials never enter the sandbox.\n- The free Make.com plan only includes \"Limited\" API access — paid plans unlock full /api/v2. Admin/internal endpoints will 403 on most tokens.\n",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "JavaScript code to execute against the live Make.com API. Use await — operations are async."
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    }
+  ]
+}

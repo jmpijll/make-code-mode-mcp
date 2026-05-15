@@ -1,0 +1,74 @@
+name: Bug report
+description: Something the server / sandbox / spec loader does wrong.
+title: '[bug] '
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Please read [`AGENTS.md`](../../blob/main/AGENTS.md)
+        and [`SKILL.md`](../../blob/main/SKILL.md) first — most surprises end up
+        being upstream Make.com plan/scope/IP gates that the error message already
+        names.
+  - type: input
+    id: version
+    attributes:
+      label: Server commit / version
+      description: Output of `git rev-parse HEAD` or the tagged release.
+      placeholder: 3723784… or v0.1.0-beta.1
+    validations:
+      required: true
+  - type: input
+    id: node
+    attributes:
+      label: Node.js version
+      description: Output of `node --version`.
+      placeholder: v22.x
+    validations:
+      required: true
+  - type: dropdown
+    id: transport
+    attributes:
+      label: Transport
+      options:
+        - stdio
+        - Streamable HTTP
+        - Cloudflare Worker (cf-worker/)
+        - Other / unknown
+    validations:
+      required: true
+  - type: input
+    id: zone
+    attributes:
+      label: Make.com zone (MAKE_BASE_URL)
+      placeholder: https://eu1.make.com/api/v2
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear, short description plus the full error message (including the `[make.…]` prefix and Make.com error code like `[IM121]` / `[SC400]`).
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimum reproduction
+      description: Paste the `search` / `execute` code you ran (or the curl invocation in HTTP mode). Redact credentials and tenant IDs.
+      render: javascript
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: I redacted credentials, real user IDs / org IDs / team IDs, and email addresses.
+          required: true
+        - label: I confirmed via Make.com docs that the call I'm making is supposed to work on my plan and with my token's scopes.
+          required: false

@@ -1,0 +1,13 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"id\": 9999999,\n  \"name\": \"Example User\",\n  \"email\": \"user@example.com\"\n}"
+    },
+    {
+      "type": "text",
+      "text": "--- Executed in 129ms · 1 API calls ---"
+    }
+  ],
+  "isError": false
+}
