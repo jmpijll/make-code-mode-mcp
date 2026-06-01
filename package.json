@@ -70,7 +70,7 @@
     "wrangler": "^4.92.0"
   },
   "dependencies": {
-    "@apidevtools/json-schema-ref-parser": "^11.7.0",
+    "@apidevtools/json-schema-ref-parser": "^15.3.5",
     "@modelcontextprotocol/sdk": "^1.0.0",
     "quickjs-emscripten": "^0.32.0",
     "undici": "^8.3.0",
