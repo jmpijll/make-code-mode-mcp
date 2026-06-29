@@ -58,7 +58,7 @@
   "devDependencies": {
     "@cloudflare/codemode": "^0.4.2",
     "@cloudflare/workers-types": "^4.20260626.1",
-    "@types/node": "^25.9.1",
+    "@types/node": "^26.0.1",
     "@typescript-eslint/eslint-plugin": "^8.62.0",
     "@typescript-eslint/parser": "^8.62.0",
     "dotenv": "^17.0.0",
