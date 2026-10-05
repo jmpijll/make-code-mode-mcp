@@ -228,3 +228,9 @@ If you add new client coverage, update the table in the README in the same PR. D
 - **NPM publish** — reserved for `1.0.0`. The package is `"private": true` until then.
 
 If you pick one up, write a short design note in `docs/` first.
+
+## Shared offline validation
+
+`npm run check` includes strict formatting and `smoke:mcp`, which initializes the built stdio server
+and checks package metadata and both tool names with network access disabled and no tenant credentials.
+`npm run cf:check` bundles the Worker without deploying. Keep live API and interactive Inspector checks separate.

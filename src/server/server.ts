@@ -1,3 +1,4 @@
+import { SERVER_VERSION } from '../version.js';
 /**
  * MCP Server — Make.com Code Mode
  *
@@ -125,7 +126,7 @@ export function createMcpServer(options: CreateServerOptions): McpServer {
     limits,
     logger,
     name = 'make-code-mode-mcp',
-    version = '0.1.0',
+    version = SERVER_VERSION,
   } = options;
 
   const server = new McpServer(
