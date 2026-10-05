@@ -25,6 +25,7 @@
  * the Node HTTP transport (see [docs/multi-tenant.md](../docs/multi-tenant.md)).
  */
 
+import packageInfo from '../package.json';
 import { DynamicWorkerExecutor } from '@cloudflare/codemode';
 import { openApiMcpServer, type RequestOptions } from '@cloudflare/codemode/mcp';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
@@ -83,7 +84,7 @@ export default {
       spec,
       executor,
       name: 'make-code-mode-mcp',
-      version: '0.1.0',
+      version: packageInfo.version,
       request: async (opts: RequestOptions): Promise<unknown> => doRequest(opts, creds),
     });
 

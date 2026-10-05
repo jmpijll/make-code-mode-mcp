@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Enforce consistent formatting and contributor/Dependabot conventions; include linked documentation and artwork in package contents.
+- Add the same offline built-MCP smoke and Worker dry-run commands; use package versions in server-factory defaults.
+
+- Derive Node MCP version metadata from package.json across the family; use package metadata in Worker scaffolds to prevent release drift.
+- Align README presentation with Vapour and Slightshot, retaining detailed setup and historical verification in the usage guide.
+- Align Node 22.19+ requirements, contributor checks, install policy, LF text handling, CI and Docker build exclusions across the code-mode server family.
+
 ## [0.1.0-beta.1] — initial public beta
 
 Initial scaffold of the Make.com code-mode MCP server. See [`README.md`](README.md)

@@ -1,31 +1,16 @@
-<!-- Thanks for the PR! A couple of asks before you click "Create" -->
-
 ## What changed
 
-<!-- One or two sentences. Link the issue if there is one. -->
+Describe the problem and resulting behavior. Link related issues where applicable.
 
 ## Verification
 
-<!--
-Before opening this PR you should have run, at minimum:
-  npm run typecheck
-  npm run lint
-  npm test
-  npm run build
-Paste the relevant tails or check the box.
--->
-
-- [ ] `npm run typecheck` clean
-- [ ] `npm run lint` clean
-- [ ] `npm test` — total / passing
-- [ ] `npm run build` succeeds
-- [ ] If the change is user-facing, the relevant doc was updated (README / AGENTS / SKILL / docs/*).
-- [ ] If verification scope changed, the **Verification status** table in `README.md` was updated in the same PR (no silent widening of "verified").
-
-## Make.com tenant data
-
-- [ ] No real user IDs, org IDs, team IDs, email addresses, or scenario blueprints leak into committed transcripts. (Run `scripts/redact-transcripts.ts` if you regenerated anything in `out/verification/`.)
+- [ ] `npm run check` succeeds (lint, formatting, typecheck, mocked tests and build)
+- [ ] Built MCP smoke succeeds (included in `npm run check`); no tenant credentials needed
+- [ ] `npm run cf:check` succeeds if the Worker or its dependencies changed
+- [ ] Relevant README, usage, contributor or agent docs updated
+- [ ] Live checks, if performed, name the client, upstream version and operations exercised
+- [ ] No credentials, tenant identifiers or private service data committed
 
 ## Notes for reviewers
 
-<!-- Anything subtle, surprising, or worth a second pair of eyes? -->
+Describe compatibility changes and remaining validation. Keep mocked, live and LLM-mediated evidence distinct.
