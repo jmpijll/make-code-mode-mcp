@@ -28,3 +28,6 @@ src/spec/cache/
 # tenant data — only the curated verification/ subfolder is committed.
 out/*
 !out/verification/
+
+# Worker dry-run output
+.wrangler-out/

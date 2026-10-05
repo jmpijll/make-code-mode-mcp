@@ -54,7 +54,7 @@ The whole product is just **two MCP tools** — `search` and `execute` — backe
 ## 3. Daily dev loop
 
 ```bash
-npm install                # one-time (uses --legacy-peer-deps; see .npmrc)
+npm ci                     # one-time (resolver policy is in .npmrc)
 npm run typecheck          # tsc --noEmit
 npm test                   # vitest run (81 cases)
 npm run lint               # eslint
@@ -163,7 +163,7 @@ The on-disk cache in `src/spec/cache/*.json` stores the *output* of `buildOperat
 
 ## 7. Code style
 
-- TypeScript, strict, ESM. Node 20+.
+- TypeScript, strict, ESM. Node 22 and 24.19+.
 - **Avoid narrative comments.** Comments explain the *why* of non-obvious decisions only — never restate what the code does.
 - Prefer plain functions over classes when there's no state.
 - Errors in the host that need to reach the sandbox go through `formatHttpError` / the executor's error path — preserve the `[make.<error-class>]` prefix, the model relies on it.

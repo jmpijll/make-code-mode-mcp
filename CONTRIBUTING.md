@@ -10,7 +10,7 @@ architectural invariants that PRs are gated on.
 ```bash
 git clone https://github.com/jmpijll/make-code-mode-mcp.git
 cd make-code-mode-mcp
-npm install
+npm ci
 cp .env.example .env
 # Edit .env: set MAKE_API_KEY (and optionally MAKE_BASE_URL).
 npm run typecheck
@@ -27,7 +27,7 @@ npm run format:check
 npm run build       # tsc → dist/
 ```
 
-All five must be green. CI runs the same set on Node 22.
+All five must be green. CI runs the same set on Node 22 and 24.
 
 ## Conventional Commits
 
@@ -66,3 +66,14 @@ actually executed and captured a transcript for goes in the table.
   and stays there.
 - Vendored copies of Make's OpenAPI spec other than the single snapshot at
   `src/spec/make-fallback.json` produced by `npm run update-spec`.
+
+
+## Shared repository conventions
+
+- Use Node.js 22.19+; the lockfile dependencies require this baseline.
+- Install with `npm ci`; `.npmrc` keeps the resolver policy consistent in local, CI and Docker builds.
+- Run `npm run check` before opening a PR: lint, typecheck, mocked tests and build.
+- Run `npm run format:check` separately and report existing drift. CI requires formatting to pass; normalize LF line endings before diagnosing warnings.
+- Keep text files in LF format (`.gitattributes`).
+- Keep service-specific API semantics, tool names and sandbox bridges compatible.
+- Record live checks separately from mocked tests; never infer new client or upstream coverage from CI.
